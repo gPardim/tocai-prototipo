@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tocaí — protótipo</title>
+<style>
+:root{--bg:#ececec;--app:#f7f7f7;--card:#fff;--ink:#3e3e3e;--mut:#717171;--line:#eaeaea;--pri:#ea1d2c;--onpri:#fff;--ok:#2f9e5e;--wait:#c77700;--soft:#fdecee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 "Nunito Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:14px 10px}
+.roles{display:flex;gap:6px;margin-bottom:12px;background:var(--card);padding:4px;border-radius:999px;border:1px solid var(--line)}
+.roles button{border:0;background:none;color:var(--mut);padding:8px 18px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer}
+.roles button.on{background:var(--pri);color:var(--onpri)}
+.wrap{position:relative;width:100%;max-width:390px}
+.phone{height:730px;max-height:calc(100vh - 90px);min-height:540px;background:var(--app);border-radius:30px;border:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.14);position:relative}
+.head{background:var(--card);padding:14px 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.head h1{font-size:18px;margin:0;flex:1}
+.back{border:0;background:none;color:var(--pri);font-size:26px;line-height:1;cursor:pointer;padding:0 4px}
+.loc{font-size:12px;color:var(--mut)}.loc b{display:block;color:var(--ink);font-size:15px}
+.body{flex:1;overflow:auto;padding:12px 16px 16px}
+.nav{display:flex;background:var(--card);border-top:1px solid var(--line)}
+.nav button{flex:1;border:0;background:none;color:var(--mut);padding:9px 4px 11px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.nav button span{display:block;font-size:20px;line-height:1.2}
+.nav button.on{color:var(--pri)}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 12px;margin-bottom:12px}
+.search input{border:0;background:none;color:var(--ink);font:inherit;padding:12px 0;width:100%;outline:0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 -16px 8px;padding-left:16px;padding-right:16px}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.chip.on{background:var(--pri);border-color:var(--pri);color:var(--onpri)}
+.promo{background:var(--pri);color:var(--onpri);border-radius:16px;padding:16px;margin-bottom:6px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.promo b{font-size:17px;display:block}.promo small{opacity:.9}.promo .e{font-size:40px}
+h2{font-size:17px;margin:18px 0 10px}
+.place{display:flex;gap:12px;background:var(--card);border-radius:14px;padding:12px;margin-bottom:10px;border:1px solid var(--line);cursor:pointer}
+.place.off{opacity:.6;cursor:default}
+.thumb{width:62px;height:62px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:28px;flex:none}
+.place b{display:block}.mut{color:var(--mut);font-size:13px}
+.star{color:var(--wait);font-weight:700}
+.live{color:var(--ok);font-weight:700;font-size:13px}
+.cover{height:130px;margin:-12px -16px 0;background:var(--pri);color:var(--onpri);display:grid;place-items:center;font-size:56px}
+.info{padding:14px 0 4px}.info h2{margin:0 0 4px;font-size:21px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.card b.big{font-size:17px;display:block}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px}
+.row .t{flex:1;min-width:0}.row b{display:block}
+.pos{width:28px;height:28px;border-radius:50%;background:var(--soft);color:var(--pri);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.add{border:0;background:var(--pri);color:var(--onpri);width:34px;height:34px;border-radius:50%;font-size:20px;font-weight:700;cursor:pointer;flex:none}
+.cta{position:absolute;left:16px;right:16px;bottom:68px;border:0;background:var(--pri);color:var(--onpri);padding:14px;border-radius:12px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.btn{display:block;width:100%;border:0;background:var(--pri);color:var(--onpri);padding:13px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;margin-top:10px}
+.btn.alt{background:var(--soft);color:var(--pri)}.btn.ok{background:var(--ok)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.steps{display:flex;gap:4px;margin:10px 0 6px}.steps i{flex:1;height:5px;border-radius:3px;background:var(--line)}.steps i.on{background:var(--ok)}.steps.bad i.on{background:var(--pri)}
+.tag{font-size:12px;font-weight:800}.tag.w{color:var(--wait)}.tag.c{color:var(--ok)}.tag.r{color:var(--pri)}
+label{font-size:13px;font-weight:700;color:var(--mut)}
+.in{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:var(--card);color:var(--ink);margin:4px 0 8px}
+.stats{display:flex;gap:8px;margin-bottom:10px}.stats div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;font-size:13px;color:var(--mut)}.stats b{font-size:22px;display:block;color:var(--ink)}
+.toast{position:absolute;left:50%;bottom:130px;transform:translateX(-50%);background:var(--ink);color:var(--app);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:5;white-space:nowrap}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;margin:6px 0 14px}.seg button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font:inherit;font-weight:800;cursor:pointer}.seg button.on{background:var(--pri);color:var(--onpri)}.logo{text-align:center;font-size:44px;margin-top:18px}.logo b{display:block;font-size:26px;color:var(--pri)}.opt{display:flex;gap:8px;margin-bottom:10px}.opt button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 4px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}.opt button.on{border-color:var(--pri);background:var(--soft);color:var(--pri)}.btn.out{background:none;color:var(--mut);border:1px solid var(--line)}</style>
+</head>
+<body>
+<div class="wrap"><div class="phone" id="phone"></div><div class="toast" id="toast"></div></div>
+<script>
+const SONGS=[["Evidências","Chitãozinho & Xororó"],["Notificação Preferida","Zé Neto & Cristiano"],["Anna Júlia","Los Hermanos"],["Trem-Bala","Ana Vilela"],["Tempo Perdido","Legião Urbana"],["Tocando em Frente","Almir Sater"],["Wonderwall","Oasis"],["Como É Grande o Meu Amor por Você","Roberto Carlos"]];
+const PLACES=[["🎸","Boate Azul","Sertanejo","4,8","120 m"],["🍻","Bar do Zeca","Pagode","4,6","450 m"],["🍽️","Restaurante Cantiga","MPB","4,7","800 m"]];
+const GEN=["Sertanejo","Pagode","MPB","Rock","Pop"];
+const AP=[
+{who:"Banda Vento Sul",local:"Boate Azul",quando:"Hoje · 20:00",st:"on",q:[{m:"Evidências",who:"Mesa 4",s:"w",h:"20:05"},{m:"Notificação Preferida",who:"Mesa 9",s:"w",h:"20:07"},{m:"Anna Júlia",who:"Mesa 2",s:"w",h:"20:09"}]},
+{who:"Banda Vento Sul",local:"Boate Azul",quando:"Sex · 22:00",st:"next",q:[]},
+{who:"Duo Maré",local:"Boate Azul",quando:"Sáb · 21:30",st:"next",q:[]},
+{who:"Banda Vento Sul",local:"Boate Azul",quando:"Qui · 20:00",st:"done",q:[{m:"Tempo Perdido",who:"Mesa 1",s:"c",h:"20:12",a:"20:15"},{m:"Wonderwall",who:"Mesa 6",s:"r",h:"20:20",a:"20:22"},{m:"Trem-Bala",who:"Mesa 3",s:"c",h:"20:25",a:"20:30"}]}];
+const MUS=[{n:"Banda Vento Sul",l:true},{n:"Duo Maré",l:true},{n:"Lia Duarte",l:false}];
+const DEMO={c:"Ana Souza",m:"Banda Vento Sul",d:"Carlos Mendes"};
+let user=null,last=null,tab="in",nr="c",scr="home",chip="Todos",fav=["Sertanejo"],sel=0;
+const $=s=>document.querySelector(s);
+const hora=()=>new Date().toTimeString().slice(0,5);
+const ST={w:["Na fila","w"],c:["Concluída","c"],r:["Recusada","r"]};
+const SA={on:["Em andamento","c"],next:["Agendada","w"],done:["Encerrada","r"]};
+const act=()=>AP.find(a=>a.st==="on"),pend=a=>a.q.filter(x=>x.s==="w"),hist=a=>a.q.filter(x=>x.s!=="w");
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)}
+const NAV={c:[["home","🏠","Início"],["perfil","👤","Perfil"]],m:[["agenda","📅","Agenda"],["perfil","👤","Perfil"]],d:[["agenda","📅","Apresentações"],["perfil","👤","Perfil"]]};
+const go=x=>{scr=x;render()};
+const abrirAp=i=>{sel=i;go("apres")};
+function enter(r,n,e){user={role:r,name:n,est:e||"Boate Azul"};last=user;scr=NAV[r][0][0];if(r==="m"&&!MUS.some(x=>x.n===n))MUS.push({n,l:false});render()}
+function cadastrar(){const n=$("#nm").value.trim()||DEMO[nr],e=nr==="d"?($("#en").value.trim()||"Meu Bar"):"";enter(nr,n,e);toast("Conta criada!")}
+function entrar(){if(last)enter(last.role,last.name,last.est);else toast("Crie uma conta ou use o acesso rápido")}
+const sair=()=>{user=null;render()};
+function pedir(m){act().q.push({m,who:"Você",s:"w",h:hora()});toast("Pedido enviado!");go("perfil")}
+function resp(s){const n=pend(AP[sel])[0];n.s=s;n.a=hora();toast(s==="c"?"Música concluída":"Música recusada");render()}
+function toggleAp(i){const a=AP[i];if(a.st==="on"){a.st="done";toast("Apresentação encerrada")}else{const o=act();if(o)o.st="done";a.st="on";toast("Apresentação iniciada")}render()}
+function criarAp(){AP.push({who:$("#ms").value,local:user.est,quando:$("#dt").value||"Data a definir",st:"next",q:[]});toast("Apresentação criada e músico vinculado");render()}
+function songRows(t){t=t.toLowerCase();return SONGS.filter(s=>(s[0]+s[1]).toLowerCase().includes(t)).map(s=>`<div class="row"><div class="thumb" style="width:44px;height:44px;font-size:20px">🎵</div><div class="t"><b>${s[0]}</b><span class="mut">${s[1]}</span></div><button class="add" aria-label="Pedir ${s[0]}" onclick="pedir(this.dataset.m)" data-m="${s[0]}">+</button></div>`).join("")||'<p class="mut">Nenhuma música encontrada.</p>'}
+function placeList(){return PLACES.filter(p=>chip==="Todos"||p[2]===chip).map(p=>{const live=p[1]==="Boate Azul"&&act();return `<div class="place ${live?"":"off"}" ${live?"onclick=\"go('est')\"":""}><div class="thumb">${p[0]}</div><div><b>${p[1]}</b><span class="mut"><span class="star">★ ${p[3]}</span> · ${p[2]} · ${p[4]}</span><br>${live?'<span class="live">● Show ao vivo agora</span>':'<span class="mut">Sem show no momento</span>'}</div></div>`}).join("")||'<p class="mut">Nenhum estabelecimento nesse gênero por perto.</p>'}
+function meus(){const l=[];AP.forEach(a=>a.q.forEach(x=>{if(x.who==="Você")l.push([a,x])}));return l.map(([a,x])=>{const p=pend(a).indexOf(x)+1,d=x.s!=="w";return `<div class="card"><div style="display:flex;justify-content:space-between"><b>${x.m}</b><span class="tag ${ST[x.s][1]}">${d?ST[x.s][0]:"Posição "+p}</span></div><span class="mut">${a.local} · pedida às ${x.h}</span><div class="steps ${x.s==="r"?"bad":""}"><i class="on"></i><i class="${x.s==="w"&&p===1||d?"on":""}"></i><i class="${d?"on":""}"></i></div><span class="mut">${x.s==="w"?(p===1?"É a próxima! O músico vai responder em instantes.":"Aguardando a vez na fila"):x.s==="c"?"O músico cantou sua música 🎉":"O músico não vai tocar esta. Peça outra!"}</span></div>`}).join("")||'<div class="card"><b>Nenhum pedido ainda</b><span class="mut">Entre em um estabelecimento com show ao vivo e peça sua música.</span></div>'}
+const sairBtn='<button class="btn out" onclick="sair()">Sair da conta</button>';
+const field=(l,v)=>`<label>${l}</label><input class="in" value="${v}">`;
+function histBlock(a){const d=hist(a),c=d.filter(x=>x.s==="c").length;return `<h2>Histórico desta apresentação</h2><div class="stats"><div><b>${c}</b>cantadas</div><div><b>${d.length-c}</b>recusadas</div><div><b>${pend(a).length}</b>pendentes</div></div>`+(d.map(x=>`<div class="row"><div class="t"><b>${x.m}</b><span class="mut">${x.who} · pedida ${x.h} · atendida ${x.a}</span></div><span class="tag ${ST[x.s][1]}">${ST[x.s][0]}</span></div>`).join("")||'<p class="mut">Nenhuma música atendida ainda.</p>')}
+function filaBlock(a){const p=pend(a),n=p[0];return `<h2>Fila</h2>`+(n?`<div class="card" style="border:2px solid var(--pri)"><span class="mut">Próxima da fila</span><b class="big" style="font-size:22px">${n.m}</b><span class="mut">${n.who} · pedida às ${n.h}</span>${user.role==="m"?`<div class="two"><button class="btn ok" onclick="resp('c')">Cantar</button><button class="btn" onclick="resp('r')">Recusar</button></div>`:""}</div>`:`<div class="card"><b class="big">Fila vazia</b><span class="mut">Novos pedidos aparecem aqui em tempo real.</span></div>`)+(p.length>1?p.slice(1).map((x,i)=>`<div class="row"><span class="pos">${i+2}</span><div class="t"><b>${x.m}</b></div></div>`).join(""):"")+(user.role==="m"?`<p class="mut">A ordem é obrigatória: só dá para tratar a primeira música.</p>`:"")}
+function apCard(a,i,dono){const d=hist(a),c=d.filter(x=>x.s==="c").length;return `<div class="card" ${a.st==="on"?'style="border:2px solid var(--pri)"':""}><div style="display:flex;justify-content:space-between"><b>${dono?a.who:a.local}</b><span class="tag ${SA[a.st][1]}">${SA[a.st][0]}</span></div><span class="mut">${a.quando}${a.st!=="next"?` · ${c} cantadas · ${d.length-c} recusadas`:""}</span><div class="two"><button class="btn alt" onclick="abrirAp(${i})">${a.st==="on"&&!dono?"Abrir fila ("+pend(a).length+")":a.st==="next"?"Detalhes":"Ver histórico"}</button>${dono&&a.st!=="done"?`<button class="btn" onclick="toggleAp(${i})">${a.st==="on"?"Encerrar":"Iniciar"}</button>`:"<span></span>"}</div></div>`}
+function view(){
+ const r=user.role;
+ if(r==="c"){
+  if(scr==="home")return{t:`<div class="loc">Estou em<b>Perto de você ⌄</b></div>`,b:`<div class="search">🔍<input placeholder="Buscar bar ou restaurante" aria-label="Buscar"></div><div class="chips">${["Todos",...GEN.slice(0,4)].map(c=>`<button class="chip ${chip===c?"on":""}" onclick="chip='${c}';render()">${c}</button>`).join("")}</div><div class="promo" onclick="go('est')"><span class="e">📱</span><div><b>Estou em um bar</b><small>Entre pelo QR Code e peça sua música</small></div></div><h2>Estabelecimentos</h2>${placeList()}`};
+  if(scr==="est"){const a=act();return{t:"Boate Azul",back:"home",b:`<div class="cover">🎸</div><div class="info"><h2>Boate Azul</h2><span class="mut"><span class="star">★ 4,8</span> · Sertanejo · 120 m</span></div>`+(a?`<div class="card"><span class="live">● Tocando agora</span><b class="big">${a.who}</b><span class="mut">Apresentação em andamento</span></div><h2>Fila de músicas (${pend(a).length})</h2>${pend(a).map((x,i)=>`<div class="row"><span class="pos">${i+1}</span><div class="t"><b>${x.m}</b></div></div>`).join("")||'<p class="mut">A fila está vazia. Peça a primeira música!</p>'}<div style="height:70px"></div>`:`<div class="card"><b class="big">Sem show no momento</b><span class="mut">Os pedidos abrem quando uma apresentação começar.</span></div>`),cta:a?"Pedir uma música":""}}
+  if(scr==="buscar")return{t:"Pedir música",back:"est",b:`<div class="search">🔍<input id="busca" placeholder="Buscar música ou artista" oninput="$('#res').innerHTML=songRows(this.value)" aria-label="Buscar música"></div><p class="mut" style="margin-top:0">Pedido para a Boate Azul · entra no fim da fila</p><div id="res">${songRows("")}</div>`};
+  return{t:"Perfil",b:`<div class="card" style="text-align:center"><div class="thumb" style="margin:0 auto 6px">🙂</div><b class="big">${user.name}</b><span class="mut">Cliente</span></div><h2>Gêneros favoritos</h2><div class="chips" style="flex-wrap:wrap;margin:0">${GEN.map(g=>`<button class="chip ${fav.includes(g)?"on":""}" onclick="fav=fav.includes('${g}')?fav.filter(x=>x!=='${g}'):[...fav,'${g}'];render()">${g}</button>`).join("")}</div><h2>Meus pedidos</h2>${meus()}${sairBtn}`};
+ }
+ if(scr==="apres"){const a=AP[sel];return{t:a.st==="on"&&r==="m"?"Fila ao vivo":"Apresentação",back:"agenda",b:`<div class="card"><div style="display:flex;justify-content:space-between"><b class="big">${r==="d"?a.who:a.local}</b><span class="tag ${SA[a.st][1]}">${SA[a.st][0]}</span></div><span class="mut">${a.quando}${r==="d"?" · "+a.local:""}</span>${r==="d"&&a.st!=="done"?`<button class="btn" onclick="toggleAp(${sel})">${a.st==="on"?"Encerrar apresentação":"Iniciar apresentação"}</button>`:""}</div>`+(a.st==="on"?filaBlock(a):"")+(a.st==="next"?'<p class="mut">O histórico aparece depois que a apresentação começar.</p>':histBlock(a))}}
+ if(r==="m"){
+  if(scr==="agenda"){const l=AP.map((a,i)=>[a,i]).filter(x=>x[0].who===user.name);return{t:"Agenda de apresentações",b:l.map(([a,i])=>apCard(a,i,false)).join("")||'<div class="card"><b>Nenhuma apresentação agendada</b><span class="mut">Quando um dono vincular você a uma apresentação, ela aparece aqui.</span></div>'}}
+  return{t:"Perfil",b:`<div class="card" style="text-align:center"><div class="thumb" style="margin:0 auto 6px">🎸</div><b class="big">${user.name}</b><span class="mut">Músico</span></div>${field("Nome artístico",user.name)}${field("Gêneros","Sertanejo, MPB")}${field("Descrição","Voz e violão para animar a noite.")}<button class="btn" onclick="toast('Perfil salvo')">Salvar perfil</button>${sairBtn}`};
+ }
+ if(scr==="agenda"){const l=AP.map((a,i)=>[a,i]).filter(x=>x[0].local===user.est);return{t:"Apresentações",b:(l.map(([a,i])=>apCard(a,i,true)).join("")||'<div class="card"><b>Nenhuma apresentação ainda</b><span class="mut">Crie a primeira apresentação e escolha o músico.</span></div>')+`<h2>Nova apresentação</h2><label>Músico da apresentação</label><select class="in" id="ms">${MUS.map(m=>`<option>${m.n}</option>`).join("")}</select><p class="mut" style="margin:-2px 0 6px">O músico é vinculado só a esta apresentação e vê ela na agenda dele.</p><label>Data e horário</label><input class="in" id="dt" value="Dom · 20:00"><button class="btn" onclick="criarAp()">Criar apresentação</button>`}}
+ return{t:"Perfil",b:`<div class="card" style="text-align:center"><div class="thumb" style="margin:0 auto 6px">🏪</div><b class="big">${user.est}</b><span class="mut">Dono · ${user.name}</span></div>${field("Nome do estabelecimento",user.est)}${field("CNPJ","12.345.678/0001-90")}${field("Endereço","Rua das Flores, 100")}<button class="btn" onclick="toast('Perfil salvo')">Salvar perfil</button>${sairBtn}`};
+}
+function authView(){return `<div class="body"><div class="logo">🎤<b>Tocaí</b><span class="mut" style="font-size:14px;font-weight:400">Peça sua música, sem gritar.</span></div><div class="seg"><button class="${tab==="in"?"on":""}" onclick="tab='in';render()">Entrar</button><button class="${tab==="up"?"on":""}" onclick="tab='up';render()">Criar conta</button></div>`+(tab==="in"?`<label>E-mail</label><input class="in" placeholder="voce@exemplo.com"><label>Senha</label><input class="in" type="password" placeholder="••••••••"><button class="btn" onclick="entrar()">Entrar</button><h2>Acesso rápido para testar</h2><div class="opt"><button onclick="enter('c',DEMO.c)">Cliente</button><button onclick="enter('m',DEMO.m)">Músico</button><button onclick="enter('d',DEMO.d)">Dono</button></div>`:`<label>Quero criar uma conta de</label><div class="opt">${[["c","Cliente"],["m","Músico"],["d","Dono"]].map(o=>`<button class="${nr===o[0]?"on":""}" onclick="nr='${o[0]}';render()">${o[1]}</button>`).join("")}</div><label>${nr==="m"?"Nome artístico":"Seu nome"}</label><input class="in" id="nm" placeholder="Nome">`+(nr==="d"?`<label>Nome do estabelecimento</label><input class="in" id="en" placeholder="Ex.: Boate Azul"><label>CNPJ</label><input class="in" placeholder="00.000.000/0000-00"><label>Endereço</label><input class="in" placeholder="Rua, número, cidade">`:"")+`<label>E-mail</label><input class="in" placeholder="voce@exemplo.com"><label>Senha</label><input class="in" type="password" placeholder="••••••••"><button class="btn" onclick="cadastrar()">Criar conta</button>`)+`</div>`}
+function render(){
+ if(!user){$("#phone").innerHTML=authView();return}
+ const v=view();
+ $("#phone").innerHTML=`<div class="head">${v.back?`<button class="back" aria-label="Voltar" onclick="go('${v.back}')">‹</button>`:""}${v.t.startsWith("<")?`<div style="flex:1">${v.t}</div>`:`<h1>${v.t}</h1>`}</div><div class="body">${v.b}</div>${v.cta?`<button class="cta" onclick="go('buscar')">${v.cta}</button>`:""}<div class="nav">${NAV[user.role].map(n=>`<button class="${scr===n[0]||(scr==="est"&&n[0]==="home")||((scr==="apres"||scr==="vinc")&&n[0]==="agenda")?"on":""}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join("")}</div>`;
+}
+render();
+</script>
+</body>
+</html>
