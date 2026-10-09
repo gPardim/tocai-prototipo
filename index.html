@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tocaí — protótipo</title>
 <style>
-:root{--bg:#ececec;--app:#f7f7f7;--card:#fff;--ink:#3e3e3e;--mut:#717171;--line:#eaeaea;--pri:#ea1d2c;--onpri:#fff;--ok:#2f9e5e;--wait:#c77700;--soft:#fdecee;
+:root{--bg:#ececec;--app:#f7f7f7;--card:#fff;--ink:#3e3e3e;--mut:#717171;--line:#eaeaea;--pri:#d4001b;--onpri:#fff;--ok:#1f7a46;--wait:#9a5b00;--soft:#fdecee;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}}
-:root[data-theme="dark"]{--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--onpri:#1a1a1a;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--app:#141414;--card:#1e1e1e;--ink:#f1f1f1;--mut:#a3a3a3;--line:#2f2f2f;--pri:#ff4a58;--onpri:#1a1a1a;--ok:#4cc585;--wait:#f0b04f;--soft:#3a1a1e}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 "Nunito Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:14px 10px}
@@ -61,7 +61,13 @@ label{font-size:13px;font-weight:700;color:var(--mut)}
 .toast.show{opacity:1}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 button:focus-visible,input:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
-.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;margin:6px 0 14px}.seg button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font:inherit;font-weight:800;cursor:pointer}.seg button.on{background:var(--pri);color:var(--onpri)}.logo{text-align:center;font-size:44px;margin-top:18px}.logo b{display:block;font-size:26px;color:var(--pri)}.opt{display:flex;gap:8px;margin-bottom:10px}.opt button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 4px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}.opt button.on{border-color:var(--pri);background:var(--soft);color:var(--pri)}.btn.out{background:none;color:var(--mut);border:1px solid var(--line)}</style>
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;margin:6px 0 14px}.seg button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font:inherit;font-weight:800;cursor:pointer}.seg button.on{background:var(--pri);color:var(--onpri)}.logo{text-align:center;font-size:44px;margin-top:18px}.logo b{display:block;font-size:26px;color:var(--pri)}.opt{display:flex;gap:8px;margin-bottom:10px}.opt button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 4px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}.opt button.on{border-color:var(--pri);background:var(--soft);color:var(--pri)}.btn.out{background:none;color:var(--mut);border:1px solid var(--line)}.add{width:48px;height:48px;font-size:22px}
+.back{min-width:48px;min-height:48px;display:grid;place-items:center}
+.chip,.seg button,.opt button{min-height:48px}
+.btn{min-height:48px}
+.in,.search{min-height:48px}
+.nav button{min-height:56px}
+</style>
 </head>
 <body>
 <div class="wrap"><div class="phone" id="phone"></div><div class="toast" id="toast"></div></div>
@@ -125,10 +131,11 @@ function view(){
  return{t:"Perfil",b:`<div class="card" style="text-align:center"><div class="thumb" style="margin:0 auto 6px">🏪</div><b class="big">${user.est}</b><span class="mut">Dono · ${user.name}</span></div>${field("Nome do estabelecimento",user.est)}${field("CNPJ","12.345.678/0001-90")}${field("Endereço","Rua das Flores, 100")}<button class="btn" onclick="toast('Perfil salvo')">Salvar perfil</button>${sairBtn}`};
 }
 function authView(){return `<div class="body"><div class="logo">🎤<b>Tocaí</b><span class="mut" style="font-size:14px;font-weight:400">Peça sua música, sem gritar.</span></div><div class="seg"><button class="${tab==="in"?"on":""}" onclick="tab='in';render()">Entrar</button><button class="${tab==="up"?"on":""}" onclick="tab='up';render()">Criar conta</button></div>`+(tab==="in"?`<label>E-mail</label><input class="in" placeholder="voce@exemplo.com"><label>Senha</label><input class="in" type="password" placeholder="••••••••"><button class="btn" onclick="entrar()">Entrar</button><h2>Acesso rápido para testar</h2><div class="opt"><button onclick="enter('c',DEMO.c)">Cliente</button><button onclick="enter('m',DEMO.m)">Músico</button><button onclick="enter('d',DEMO.d)">Dono</button></div>`:`<label>Quero criar uma conta de</label><div class="opt">${[["c","Cliente"],["m","Músico"],["d","Dono"]].map(o=>`<button class="${nr===o[0]?"on":""}" onclick="nr='${o[0]}';render()">${o[1]}</button>`).join("")}</div><label>${nr==="m"?"Nome artístico":"Seu nome"}</label><input class="in" id="nm" placeholder="Nome">`+(nr==="d"?`<label>Nome do estabelecimento</label><input class="in" id="en" placeholder="Ex.: Boate Azul"><label>CNPJ</label><input class="in" placeholder="00.000.000/0000-00"><label>Endereço</label><input class="in" placeholder="Rua, número, cidade">`:"")+`<label>E-mail</label><input class="in" placeholder="voce@exemplo.com"><label>Senha</label><input class="in" type="password" placeholder="••••••••"><button class="btn" onclick="cadastrar()">Criar conta</button>`)+`</div>`}
+function ligarRotulos(){document.querySelectorAll("label").forEach((l,i)=>{const n=l.nextElementSibling;if(n&&/INPUT|SELECT/.test(n.tagName)){if(!n.id)n.id="campo"+i;l.htmlFor=n.id}})}
 function render(){
- if(!user){$("#phone").innerHTML=authView();return}
+ if(!user){$("#phone").innerHTML=authView();ligarRotulos();return}
  const v=view();
- $("#phone").innerHTML=`<div class="head">${v.back?`<button class="back" aria-label="Voltar" onclick="go('${v.back}')">‹</button>`:""}${v.t.startsWith("<")?`<div style="flex:1">${v.t}</div>`:`<h1>${v.t}</h1>`}</div><div class="body">${v.b}</div>${v.cta?`<button class="cta" onclick="irSolicitar()">${v.cta}</button>`:""}<div class="nav">${NAV[user.role].map(n=>`<button class="${scr===n[0]||(["est","presenca","buscar"].includes(scr)&&n[0]==="home")||((scr==="apres"||scr==="vinc")&&n[0]==="agenda")?"on":""}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join("")}</div>`;
+ $("#phone").innerHTML=`<div class="head">${v.back?`<button class="back" aria-label="Voltar" onclick="go('${v.back}')">‹</button>`:""}${v.t.startsWith("<")?`<div style="flex:1">${v.t}</div>`:`<h1>${v.t}</h1>`}</div><div class="body">${v.b}</div>${v.cta?`<button class="cta" onclick="irSolicitar()">${v.cta}</button>`:""}<div class="nav">${NAV[user.role].map(n=>`<button class="${scr===n[0]||(["est","presenca","buscar"].includes(scr)&&n[0]==="home")||((scr==="apres"||scr==="vinc")&&n[0]==="agenda")?"on":""}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join("")}</div>`;ligarRotulos();
 }
 render();
 </script>
